@@ -1,6 +1,7 @@
 import express from "express";
 import db from "./config/dbConnect.js";
 import livros from "./models/Livro.js";
+import routes from "./routes/index.js";
 
 db.on("error", console.log.bind(console, "Erro de conexão"));
 db.once("open", () => {
@@ -11,29 +12,11 @@ const app = express();
 
 app.use(express.json()); // interpretar o que ta chegando (via POST e PUT) e convertendo para objeto
 
-// const livros = [
-//   { id: 1, titulo: "Assassino da Capa Amarela" },
-//   { id: 2, titulo: "Zodiaco" },
-// ];
-
-app.get("/", (req, res) => {
-  res.status(200).send("Biblioteca");
-});
-
-app.get("/livros", (req, res) => {
-  livros.find((err, livros) => {
-    res.status(200).send(livros);
-  });
-});
+routes(app);
 
 app.get("/livros/:id", (req, res) => {
   let index = buscaLivro(req.params.id);
   res.json(livros[index]);
-});
-
-app.post("/livros", (req, res) => {
-  livros.push(req.body);
-  res.status(201).send("Livro cadastrado com sucesso");
 });
 
 app.put("/livros/:id", (req, res) => {
