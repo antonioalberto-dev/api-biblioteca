@@ -33,6 +33,14 @@ app.put("/livros/:id", (req, res) => {
   res.json(livros);
 });
 
+app.delete("/livros/:id", (req, res) => {
+  let { id } = req.params;
+  let index = buscaLivro(req.params.id);
+  let livroExcluido = livros[index].titulo;
+  livros.slice(index, 1);
+  res.send(`O livro ${livroExcluido.toLocaleUpperCase()} removido com sucesso!`);
+});
+
 function buscaLivro(id) {
   return livros.findIndex((livro) => livro.id == id);
 }
